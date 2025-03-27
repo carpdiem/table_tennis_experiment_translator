@@ -522,8 +522,8 @@ function updateWorldFrameChart(data) {
             showLine: true,
             borderColor: '#4bc0c0', // Match ball angle color
             backgroundColor: 'transparent',
-            borderWidth: 2,
-            borderDash: [],
+            borderWidth: 1,
+            borderDash: [3, 3], // Adding dashed line style for cleaner look
             pointRadius: 0
         });
         
@@ -590,8 +590,8 @@ function updateWorldFrameChart(data) {
             showLine: true,
             borderColor: '#ff6384', // Match paddle angle color
             backgroundColor: 'transparent',
-            borderWidth: 2,
-            borderDash: [],
+            borderWidth: 1,
+            borderDash: [3, 3], // Adding dashed line style for cleaner look
             pointRadius: 0
         });
         
@@ -664,8 +664,8 @@ function updateWorldFrameChart(data) {
             showLine: true,
             borderColor: '#ffcd56', // Match closure angle color
             backgroundColor: 'transparent',
-            borderWidth: 2,
-            borderDash: [],
+            borderWidth: 1, 
+            borderDash: [3, 3], // Adding dashed line style for cleaner look
             pointRadius: 0
         });
         
