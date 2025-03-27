@@ -601,18 +601,19 @@ function updateWorldFrameChart(data) {
         
         // Calculate the paddle normal angle and paddle surface angle
         const paddleNormalAngle = Math.PI - paddleAngleRad;
+        
+        // Calculate paddle surface angle (direction of paddle face)
         const paddleSurfaceAngle = paddleNormalAngle - closureAngleRad;
         
-        // Draw a line representing the paddle normal
-        const paddleNormalLine = [
+        // Reference line for vertical (paddle side)
+        const verticalPaddleLine = [
             { x: x_p, y: y_p },
-            { x: x_p + (radius * 0.8) * Math.cos(paddleNormalAngle), 
-              y: y_p + (radius * 0.8) * Math.sin(paddleNormalAngle) }
+            { x: x_p, y: y_p + radius }
         ];
         
         worldFrameChart.data.datasets.push({
-            label: 'Paddle Normal',
-            data: paddleNormalLine,
+            label: 'Vertical Paddle Reference',
+            data: verticalPaddleLine,
             showLine: true,
             borderColor: '#ffcd56',
             backgroundColor: 'transparent',
@@ -621,14 +622,52 @@ function updateWorldFrameChart(data) {
             pointRadius: 0
         });
         
-        // Starting from the paddle normal, create an arc for the closure angle
+        // Draw a line representing the paddle face
+        const paddleFaceLine = [
+            { x: x_p, y: y_p },
+            { x: x_p + (radius * 0.8) * Math.cos(paddleSurfaceAngle), 
+              y: y_p + (radius * 0.8) * Math.sin(paddleSurfaceAngle) }
+        ];
+        
+        worldFrameChart.data.datasets.push({
+            label: 'Paddle Face',
+            data: paddleFaceLine,
+            showLine: true,
+            borderColor: '#ffcd56',
+            backgroundColor: 'transparent',
+            borderWidth: 1,
+            borderDash: [2, 2],
+            pointRadius: 0
+        });
+        
+        // Calculate the starting angle for the closure angle arc
+        // We want to start from the positive Y-axis (Math.PI/2) and go to the paddle face
+        const closureStartAngle = Math.PI/2; // Positive Y-axis
+        
+        // Check which quadrant the paddle face is in to determine the arc direction
         const closureArcPoints = [];
-        for (let i = 0; i <= 20; i++) {
-            const angle = paddleNormalAngle - (i * (closureAngleRad / 20));
-            closureArcPoints.push({
-                x: x_p + (radius * 0.8) * Math.cos(angle),
-                y: y_p + (radius * 0.8) * Math.sin(angle)
-            });
+        
+        // Determine if we need to draw the arc clockwise or counterclockwise
+        if (paddleSurfaceAngle < Math.PI/2) {
+            // Paddle face is in first quadrant - draw arc clockwise
+            for (let i = 0; i <= 20; i++) {
+                const t = i / 20;
+                const angle = closureStartAngle * (1 - t) + paddleSurfaceAngle * t;
+                closureArcPoints.push({
+                    x: x_p + (radius * 0.8) * Math.cos(angle),
+                    y: y_p + (radius * 0.8) * Math.sin(angle)
+                });
+            }
+        } else {
+            // Paddle face is in second quadrant - draw arc counterclockwise
+            for (let i = 0; i <= 20; i++) {
+                const t = i / 20;
+                const angle = closureStartAngle * (1 - t) + paddleSurfaceAngle * t;
+                closureArcPoints.push({
+                    x: x_p + (radius * 0.8) * Math.cos(angle),
+                    y: y_p + (radius * 0.8) * Math.sin(angle)
+                });
+            }
         }
         
         worldFrameChart.data.datasets.push({
