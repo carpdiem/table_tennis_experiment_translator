@@ -419,6 +419,85 @@ function updateWorldFrameChart(data) {
             pointRadius: 4
         });
         
+        // Add ball angle arc
+        const radius = 0.05;
+        const ballAngleDeg = parseFloat(document.getElementById('angle_ball').value);
+        const ballAngleRad = degToRad(ballAngleDeg);
+        
+        // Generate arc points for ball angle
+        const ballArcPoints = [];
+        // For ball angle, create an arc from 0 to the ball angle
+        for (let i = 0; i <= 20; i++) {
+            const angle = i * (ballAngleRad / 20);
+            ballArcPoints.push({
+                x: x_p + radius * Math.cos(angle),
+                y: y_p + radius * Math.sin(angle)
+            });
+        }
+        
+        worldFrameChart.data.datasets.push({
+            label: 'Ball Angle',
+            data: ballArcPoints,
+            showLine: true,
+            borderColor: '#4bc0c0', // Match ball angle color
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            borderDash: [3, 2],
+            pointRadius: 0
+        });
+        
+        // Add paddle angle arc
+        const paddleAngleDeg = parseFloat(document.getElementById('angle_paddle').value);
+        const paddleAngleRad = degToRad(paddleAngleDeg);
+        
+        // Generate arc points for paddle angle
+        const paddleArcPoints = [];
+        // For paddle angle, create an arc from 0 to the paddle angle
+        for (let i = 0; i <= 20; i++) {
+            const angle = Math.PI - (i * (paddleAngleRad / 20));
+            paddleArcPoints.push({
+                x: x_p + radius * Math.cos(angle),
+                y: y_p + radius * Math.sin(angle)
+            });
+        }
+        
+        worldFrameChart.data.datasets.push({
+            label: 'Paddle Angle',
+            data: paddleArcPoints,
+            showLine: true,
+            borderColor: '#ff6384', // Match paddle angle color
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            borderDash: [3, 2],
+            pointRadius: 0
+        });
+        
+        // Add closure angle arc
+        const closureAngleDeg = parseFloat(document.getElementById('closed_paddle').value);
+        const closureAngleRad = degToRad(closureAngleDeg);
+        
+        // Starting from the paddle direction, create an arc for the closure angle
+        const closureBaseAngle = Math.PI - paddleAngleRad;
+        const closureArcPoints = [];
+        for (let i = 0; i <= 20; i++) {
+            const angle = closureBaseAngle + (i * (closureAngleRad / 20));
+            closureArcPoints.push({
+                x: x_p + radius * 0.7 * Math.cos(angle),
+                y: y_p + radius * 0.7 * Math.sin(angle)
+            });
+        }
+        
+        worldFrameChart.data.datasets.push({
+            label: 'Closure Angle',
+            data: closureArcPoints,
+            showLine: true,
+            borderColor: '#ffcd56', // Match closure angle color
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            borderDash: [5, 1],
+            pointRadius: 0
+        });
+        
         // Set appropriate axis ranges - tighter window focused on the collision
         const xWindow = 0.5; // Horizontal window size
         const yWindow = 0.3; // Vertical window size

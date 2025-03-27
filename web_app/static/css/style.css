@@ -122,6 +122,26 @@ canvas {
     padding-right: 0.25rem;
 }
 
+/* Angle colors for input fields and visualizations */
+.angle-ball-color {
+    color: #4bc0c0 !important;
+    border-color: #4bc0c0 !important;
+}
+
+.angle-paddle-color {
+    color: #ff6384 !important;
+    border-color: #ff6384 !important;
+}
+
+.angle-closure-color {
+    color: #ffcd56 !important;
+    border-color: #ffcd56 !important;
+}
+
+.input-angle-highlight {
+    border-left-width: 3px !important;
+}
+
 /* Hide form field labels on very small screens */
 @media (max-height: 600px) {
     .form-label {
