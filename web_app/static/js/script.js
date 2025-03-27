@@ -364,6 +364,45 @@ function updateWorldFrameChart(data) {
         // Calculate the optimal scale window
         const paddleLength = 0.3; // Just enough to show the paddle face
         
+        // Set appropriate axis ranges - tighter window focused on the collision
+        const xWindow = 0.5; // Horizontal window size
+        const yWindow = 0.3; // Vertical window size
+        const xMin = x_p - xWindow * 0.4;
+        const xMax = x_p + xWindow * 0.6;
+        const yMin = y_p - yWindow * 0.4;
+        const yMax = y_p + yWindow * 0.6;
+        
+        // Add light gray crosshairs in the background
+        // Vertical line
+        worldFrameChart.data.datasets.push({
+            label: 'Vertical Reference',
+            data: [
+                { x: x_p, y: yMin },
+                { x: x_p, y: yMax }
+            ],
+            showLine: true,
+            borderColor: 'rgba(200, 200, 200, 0.5)',
+            backgroundColor: 'transparent',
+            borderWidth: 1,
+            pointRadius: 0,
+            order: 10 // Higher order means it's drawn earlier (in the background)
+        });
+        
+        // Horizontal line
+        worldFrameChart.data.datasets.push({
+            label: 'Horizontal Reference',
+            data: [
+                { x: xMin, y: y_p },
+                { x: xMax, y: y_p }
+            ],
+            showLine: true,
+            borderColor: 'rgba(200, 200, 200, 0.5)',
+            backgroundColor: 'transparent',
+            borderWidth: 1,
+            pointRadius: 0,
+            order: 10 // Higher order means it's drawn earlier (in the background)
+        });
+        
         // Ball trajectory - trimmed to just the relevant portion
         const trajectory = trimTrajectory(data.x_ball_after, data.y_ball_after, 40);
         worldFrameChart.data.datasets.push({
@@ -554,12 +593,10 @@ function updateWorldFrameChart(data) {
         });
         
         // Set appropriate axis ranges - tighter window focused on the collision
-        const xWindow = 0.5; // Horizontal window size
-        const yWindow = 0.3; // Vertical window size
-        worldFrameChart.options.scales.x.min = x_p - xWindow * 0.4;
-        worldFrameChart.options.scales.x.max = x_p + xWindow * 0.6;
-        worldFrameChart.options.scales.y.min = y_p - yWindow * 0.4;
-        worldFrameChart.options.scales.y.max = y_p + yWindow * 0.6;
+        worldFrameChart.options.scales.x.min = xMin;
+        worldFrameChart.options.scales.x.max = xMax;
+        worldFrameChart.options.scales.y.min = yMin;
+        worldFrameChart.options.scales.y.max = yMax;
         
         // Update chart
         worldFrameChart.update();
