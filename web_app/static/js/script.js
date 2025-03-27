@@ -548,16 +548,41 @@ function updateWorldFrameChart(data) {
             pointRadius: 0
         });
         
-        // Generate arc points for paddle angle - between horizontal and paddle direction
+        // Generate arc points for paddle angle - now in the fourth quadrant (bottom-right)
         const paddleArcPoints = [];
         // For paddle angle, create an arc from horizontal to the paddle angle
+        const paddleAngleStart = 0; // Start from positive x-axis
+        const paddleAngleEnd = 2*Math.PI - paddleAngleRad; // End at paddle trajectory in fourth quadrant
+        
         for (let i = 0; i <= 20; i++) {
-            const angle = i * (paddleAngleRad / 20);
+            const angle = paddleAngleStart - (i * (paddleAngleRad / 20));
             paddleArcPoints.push({
-                x: x_p + radius * Math.cos(Math.PI - angle),
-                y: y_p + radius * Math.sin(Math.PI - angle)
+                x: x_p + radius * Math.cos(angle),
+                y: y_p + radius * Math.sin(angle)
             });
         }
+        
+        // Add a point on the paddle trajectory line to clearly show angle connection
+        const paddleTrajPoint = {
+            x: x_p + radius * Math.cos(paddleAngleEnd),
+            y: y_p + radius * Math.sin(paddleAngleEnd)
+        };
+        
+        const paddleTrajLine = [
+            { x: x_p, y: y_p },
+            { x: paddleTrajPoint.x, y: paddleTrajPoint.y }
+        ];
+        
+        worldFrameChart.data.datasets.push({
+            label: 'Paddle Trajectory Reference',
+            data: paddleTrajLine,
+            showLine: true,
+            borderColor: '#ff6384',
+            backgroundColor: 'transparent',
+            borderWidth: 1,
+            borderDash: [2, 2],
+            pointRadius: 0
+        });
         
         worldFrameChart.data.datasets.push({
             label: 'Paddle Angle',
