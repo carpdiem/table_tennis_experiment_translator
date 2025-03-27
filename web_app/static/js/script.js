@@ -458,7 +458,7 @@ function updateWorldFrameChart(data) {
             pointRadius: 4
         });
         
-        // Add ball angle arc
+        // Define variables for angle visualizations
         const radius = 0.07;
         const ballAngleDeg = parseFloat(document.getElementById('angle_ball').value);
         const ballAngleRad = degToRad(ballAngleDeg);
@@ -480,16 +480,41 @@ function updateWorldFrameChart(data) {
             pointRadius: 0
         });
         
-        // Generate arc points for ball angle - between horizontal and ball trajectory
+        // Generate arc points for ball angle - now in the third quadrant (bottom-left)
         const ballArcPoints = [];
-        // For ball angle, create an arc from horizontal to the ball angle
+        // For ball angle, create an arc from horizontal to the ball trajectory (in third quadrant)
+        const ballAngleStart = Math.PI; // Start from negative x-axis
+        const ballAngleEnd = Math.PI + ballAngleRad; // End at ball trajectory
+        
         for (let i = 0; i <= 20; i++) {
-            const angle = i * (ballAngleRad / 20);
+            const angle = ballAngleStart + (i * (ballAngleRad / 20));
             ballArcPoints.push({
-                x: x_p - radius * Math.cos(angle),
+                x: x_p + radius * Math.cos(angle),
                 y: y_p + radius * Math.sin(angle)
             });
         }
+        
+        // Add a point on the ball trajectory line to clearly show angle connection
+        const ballTrajPoint = {
+            x: x_p + radius * Math.cos(ballAngleEnd),
+            y: y_p + radius * Math.sin(ballAngleEnd)
+        };
+        
+        const ballTrajLine = [
+            { x: x_p, y: y_p },
+            { x: ballTrajPoint.x, y: ballTrajPoint.y }
+        ];
+        
+        worldFrameChart.data.datasets.push({
+            label: 'Ball Trajectory Reference',
+            data: ballTrajLine,
+            showLine: true,
+            borderColor: '#4bc0c0',
+            backgroundColor: 'transparent',
+            borderWidth: 1,
+            borderDash: [2, 2],
+            pointRadius: 0
+        });
         
         worldFrameChart.data.datasets.push({
             label: 'Ball Angle',
