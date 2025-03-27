@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Tennis Shot Translator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid py-1">
+        <h1 class="text-center" style="font-size: 1.3rem; margin: 0.3rem 0;">Table Tennis Rubber Testing Utility</h1>
+        
+        <div class="row g-2">
+            <!-- Input Panel -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header py-1 px-2">
+                        <h5 class="m-0">Input Parameters</h5>
+                    </div>
+                    <div class="card-body p-2">
+                        <form id="inputForm">
+                            <div class="row g-1">
+                                <div class="col-12">
+                                    <label for="v_ball" class="form-label">Ball velocity (m/s):</label>
+                                    <input type="number" class="form-control" id="v_ball" value="10.0" min="0" step="0.1">
+                                </div>
+                                <div class="col-12">
+                                    <label for="angle_ball" class="form-label">Ball angle (deg):</label>
+                                    <input type="number" class="form-control" id="angle_ball" value="30.0" min="-89" max="89" step="0.1">
+                                </div>
+                                <div class="col-12">
+                                    <label for="v_paddle" class="form-label">Paddle velocity (m/s):</label>
+                                    <input type="number" class="form-control" id="v_paddle" value="10.0" min="0" step="0.1">
+                                </div>
+                                <div class="col-12">
+                                    <label for="angle_paddle" class="form-label">Paddle angle (deg):</label>
+                                    <input type="number" class="form-control" id="angle_paddle" value="20.0" min="-90" max="90" step="0.1">
+                                </div>
+                                <div class="col-12">
+                                    <label for="closed_paddle" class="form-label">Paddle closure (deg):</label>
+                                    <input type="number" class="form-control" id="closed_paddle" value="20.0" min="-89.9" max="89.9" step="0.1">
+                                </div>
+                            </div>
+                            <!-- Calculate button removed as calculations now happen automatically -->
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Experiment Results Panel -->
+                <div class="card mt-2" id="experimentPanel">
+                    <div class="card-header py-1 px-2">
+                        <h5 class="m-0">Experiment Results</h5>
+                    </div>
+                    <div class="card-body p-2">
+                        <form id="experimentForm">
+                            <div class="row g-1">
+                                <div class="col-12">
+                                    <label for="v_ball_after" class="form-label">Ball velocity (m/s):</label>
+                                    <input type="number" class="form-control" id="v_ball_after" value="10.0" min="0" step="0.1">
+                                </div>
+                                <div class="col-12">
+                                    <label for="angle_ball_after" class="form-label">Ball angle (deg):</label>
+                                    <input type="number" class="form-control" id="angle_ball_after" value="30.0" step="0.1">
+                                    <small id="angleConstraint" class="form-text text-muted" style="font-size: 0.7rem;"></small>
+                                </div>
+                            </div>
+                            <!-- Calculate Result button removed as calculations now happen automatically -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Visualization Panels - Rearranged into a 2x2 grid -->
+            <div class="col-md-9">
+                <div class="row g-2">
+                    <!-- World Frame Visualization -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header py-1 px-2">
+                                <h5 class="m-0">Shot Setup (World Frame)</h5>
+                            </div>
+                            <div class="card-body viz-container p-1">
+                                <canvas id="worldFrameCanvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Paddle Frame Visualization -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header py-1 px-2">
+                                <h5 class="m-0">Paddle Reference Frame</h5>
+                            </div>
+                            <div class="card-body viz-container p-1">
+                                <canvas id="paddleFrameCanvas"></canvas>
+                                <div id="paddleFrameInfo" class="mt-1 text-center small"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row g-2 mt-2">
+                    <!-- Results Visualization -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header py-1 px-2">
+                                <h5 class="m-0">Shot Outcome</h5>
+                            </div>
+                            <div class="card-body viz-container p-1">
+                                <canvas id="resultCanvas"></canvas>
+                                <div id="resultInfo" class="mt-1 text-center small"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Final Result Visualization -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header py-1 px-2">
+                                <h5 class="m-0">World Frame Result</h5>
+                            </div>
+                            <div class="card-body viz-container p-1">
+                                <canvas id="finalResultCanvas"></canvas>
+                                <div id="finalResultInfo" class="mt-1 text-center small"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
