@@ -415,6 +415,34 @@ function updateWorldFrameChart(data) {
             pointRadius: 0
         });
         
+        // Add direction arrow in the middle of the ball trajectory
+        if (trajectory.length > 0) {
+            // Find middle point in the trajectory
+            const midIndex = Math.floor(trajectory.length / 2);
+            const midPoint = trajectory[midIndex];
+            
+            // Calculate direction based on surrounding points
+            let directionAngle = 0;
+            if (midIndex > 0 && midIndex < trajectory.length - 1) {
+                directionAngle = Math.atan2(
+                    trajectory[midIndex+1].y - trajectory[midIndex-1].y, 
+                    trajectory[midIndex+1].x - trajectory[midIndex-1].x
+                );
+            }
+            
+            // Add an arrow at the midpoint
+            worldFrameChart.data.datasets.push({
+                label: 'Ball Direction',
+                data: [{ x: midPoint.x, y: midPoint.y }],
+                showLine: false,
+                borderColor: '#4bc0c0',
+                backgroundColor: '#4bc0c0',
+                pointStyle: 'triangle',
+                rotation: rad2deg(directionAngle) - 90, // Rotate to point in trajectory direction
+                pointRadius: 4
+            });
+        }
+        
         // Paddle path - shortened to just show what's relevant
         const paddleStart = { x: x_p, y: y_p };
         const paddleDirection = Math.atan2(
@@ -434,6 +462,23 @@ function updateWorldFrameChart(data) {
             backgroundColor: 'transparent',
             borderWidth: 1,
             pointRadius: 0
+        });
+        
+        // Add direction arrow in the middle of the paddle path
+        const paddleMidPoint = {
+            x: (paddleStart.x + paddleEnd.x) / 2,
+            y: (paddleStart.y + paddleEnd.y) / 2
+        };
+        
+        worldFrameChart.data.datasets.push({
+            label: 'Paddle Direction',
+            data: [paddleMidPoint],
+            showLine: false,
+            borderColor: '#ff6384',
+            backgroundColor: '#ff6384',
+            pointStyle: 'triangle',
+            rotation: rad2deg(paddleDirection) - 90, // Rotate to point in paddle direction
+            pointRadius: 4
         });
         
         // Paddle surface
@@ -1037,4 +1082,9 @@ function updateFinalResultChart(data) {
     } catch (error) {
         console.error('Error in updateFinalResultChart:', error, data);
     }
+}
+
+// Convert radians to degrees
+function rad2deg(rad) {
+    return (180.0 / Math.PI) * rad;
 }
