@@ -602,7 +602,7 @@ function updateWorldFrameChart(data) {
         // Calculate paddle surface angle relative to vertical y-axis
         // The paddle face angle is simply measured relative to the vertical (PI/2)
         // Positive closure angle means the paddle face is tilted clockwise from vertical
-        const paddleFaceAngle = Math.PI/2 - closureAngleRad;
+        const paddleFaceAngle = Math.PI/2 + closureAngleRad; // Changed minus to plus to flip the arc
         
         // Reference line for vertical (paddle side)
         const verticalPaddleLine = [
@@ -640,46 +640,19 @@ function updateWorldFrameChart(data) {
         });
         
         // Starting from y-axis (PI/2), draw arc to the paddle face angle
-        // The actual closure angle is the difference between the y-axis and paddle face angle
         const startAngle = Math.PI/2; // Vertical y-axis
-        const endAngle = paddleFaceAngle;
         
-        // Generate the arc points
+        // Generate the arc points - direct interpolation from vertical to paddle face angle
         const closureArcPoints = [];
         
-        // Ensure we draw the arc along the shortest path
-        // We need to determine if we should go clockwise or counterclockwise
-        let cwDiff = startAngle - endAngle;
-        if (cwDiff < 0) cwDiff += 2 * Math.PI;
-        
-        let ccwDiff = endAngle - startAngle;
-        if (ccwDiff < 0) ccwDiff += 2 * Math.PI;
-        
-        // Use the shorter path
-        if (cwDiff <= ccwDiff) {
-            // Clockwise arc
-            for (let i = 0; i <= 20; i++) {
-                const t = i / 20;
-                let angle = startAngle - t * cwDiff;
-                if (angle < 0) angle += 2 * Math.PI;
-                
-                closureArcPoints.push({
-                    x: x_p + (radius * 0.8) * Math.cos(angle),
-                    y: y_p + (radius * 0.8) * Math.sin(angle)
-                });
-            }
-        } else {
-            // Counterclockwise arc
-            for (let i = 0; i <= 20; i++) {
-                const t = i / 20;
-                let angle = startAngle + t * ccwDiff;
-                if (angle > 2 * Math.PI) angle -= 2 * Math.PI;
-                
-                closureArcPoints.push({
-                    x: x_p + (radius * 0.8) * Math.cos(angle),
-                    y: y_p + (radius * 0.8) * Math.sin(angle)
-                });
-            }
+        // Generate arc directly using the closure angle
+        for (let i = 0; i <= 20; i++) {
+            const t = i / 20;
+            const angle = startAngle + t * closureAngleRad;
+            closureArcPoints.push({
+                x: x_p + (radius * 0.8) * Math.cos(angle),
+                y: y_p + (radius * 0.8) * Math.sin(angle)
+            });
         }
         
         worldFrameChart.data.datasets.push({
