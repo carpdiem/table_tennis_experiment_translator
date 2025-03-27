@@ -600,12 +600,9 @@ function updateWorldFrameChart(data) {
         const closureAngleRad = degToRad(closureAngleDeg);
         
         // Calculate paddle surface angle relative to vertical y-axis
-        // First, compute the paddle normal angle (perpendicular to paddle surface)
-        const paddleNormalAngle = Math.PI - paddleAngleRad;
-        
-        // Then the paddle surface is 90 degrees (PI/2) rotated from the normal minus the closure angle
-        // This is the actual angle of the paddle face in world coordinates
-        const paddleFaceAngle = paddleNormalAngle - Math.PI/2 - closureAngleRad;
+        // The paddle face angle is simply measured relative to the vertical (PI/2)
+        // Positive closure angle means the paddle face is tilted clockwise from vertical
+        const paddleFaceAngle = Math.PI/2 - closureAngleRad;
         
         // Reference line for vertical (paddle side)
         const verticalPaddleLine = [
