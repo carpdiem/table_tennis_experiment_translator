@@ -61,6 +61,10 @@ body {
     border: none;
     padding: 0 !important;
     height: 150px; /* Fixed height for all visualization containers */
+    width: 100%; /* Current width setting */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 canvas {
@@ -68,6 +72,8 @@ canvas {
     border-radius: 0;
     width: 100%;
     height: 100%;
+    max-width: 300px; /* Limit canvas width */
+    object-fit: contain;
 }
 
 .info-box {
