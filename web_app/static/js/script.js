@@ -600,9 +600,10 @@ function updateWorldFrameChart(data) {
         const closureAngleRad = degToRad(closureAngleDeg);
         
         // Calculate paddle surface angle relative to vertical y-axis
-        // The paddle face angle is simply measured relative to the vertical (PI/2)
-        // Positive closure angle means the paddle face is tilted clockwise from vertical
-        const paddleFaceAngle = Math.PI/2 + closureAngleRad; // Changed minus to plus to flip the arc
+        // The paddle face angle is measured relative to the vertical (PI/2)
+        // Positive closure angle tilts the paddle face left from vertical (counterclockwise)
+        // Negative closure angle tilts the paddle face right from vertical (clockwise)
+        const paddleFaceAngle = Math.PI/2 + closureAngleRad;
         
         // Reference line for vertical (paddle side)
         const verticalPaddleLine = [
@@ -642,12 +643,14 @@ function updateWorldFrameChart(data) {
         // Starting from y-axis (PI/2), draw arc to the paddle face angle
         const startAngle = Math.PI/2; // Vertical y-axis
         
-        // Generate the arc points - direct interpolation from vertical to paddle face angle
+        // Generate the arc points
         const closureArcPoints = [];
         
-        // Generate arc directly using the closure angle
+        // Start from vertical (PI/2) and go to the paddle face angle
+        // The direction and amount depend on the sign and magnitude of the closure angle
         for (let i = 0; i <= 20; i++) {
             const t = i / 20;
+            // Direct calculation ensures arc moves to the correct side based on closure angle sign
             const angle = startAngle + t * closureAngleRad;
             closureArcPoints.push({
                 x: x_p + (radius * 0.8) * Math.cos(angle),
