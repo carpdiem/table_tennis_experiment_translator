@@ -470,15 +470,12 @@ function updateWorldFrameChart(data) {
             y: (paddleStart.y + paddleEnd.y) / 2
         };
         
-        // Calculate angle from midpoint toward origin (ball/paddle contact point)
-        const arrowToOriginAngle = Math.atan2(
-            y_p - paddleMidPoint.y,
-            x_p - paddleMidPoint.x
-        );
-        
-        // After testing various offsets, we've found this rotation value
-        // ensures one vertex of the triangle points directly at the origin
-        const triangleRotation = (rad2deg(arrowToOriginAngle) - 30) % 360;
+        // If default orientation is with one vertex up,
+        // rotate counterclockwise by (90° - paddle_trajectory_angle)
+        // Note: In Chart.js, positive rotation values mean clockwise rotation,
+        // so we'll use negative value for counterclockwise
+        const paddleDirectionDeg = rad2deg(paddleDirection);
+        const triangleRotation = -(90 - paddleDirectionDeg);
         
         worldFrameChart.data.datasets.push({
             label: 'Paddle Direction',
