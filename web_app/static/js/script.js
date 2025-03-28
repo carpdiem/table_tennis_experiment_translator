@@ -977,6 +977,26 @@ function updateResultChart(angle_ball_after) {
             pointRadius: 0
         });
         
+        // Add direction triangle to the outgoing (after-impact) trajectory
+        // Calculate a midpoint along the trajectory
+        const midpointX = -outgoingLength * Math.sin(degToRad(angle_ball_after)) / 2;
+        const midpointY = paddleY - outgoingLength * Math.cos(degToRad(angle_ball_after)) / 2;
+        
+        // Calculate rotation: 180 - angle_ball_after to point along the trajectory
+        const triangleRotation = 180 - angle_ball_after;
+        
+        // Add the direction triangle
+        resultChart.data.datasets.push({
+            label: 'After-Impact Direction',
+            data: [{ x: midpointX, y: midpointY }],
+            showLine: false,
+            borderColor: '#4bc0c0',
+            backgroundColor: '#4bc0c0',
+            pointStyle: 'triangle',
+            rotation: triangleRotation,
+            pointRadius: 5
+        });
+        
         // Ball
         const ballEndX = -outgoingLength * Math.sin(degToRad(angle_ball_after));
         const ballEndY = paddleY - outgoingLength * Math.cos(degToRad(angle_ball_after));
