@@ -436,14 +436,14 @@ function updateWorldFrameChart(data) {
             const arrowPoint = visibleTrajectory[arrowIndex];
             
             // Make the triangle larger and more visible
-            const ballPointRadius = 7;
+            const ballPointRadius = 6;
             
             // Get the ball angle directly from user input
             const ballAngleDeg = parseFloat(document.getElementById('angle_ball').value);
             
             // For ball trajectory, we need to ensure correct direction
             // Using the same rotation calculation as for the paddle triangle
-            const triangleRotation = -(90 - ballAngleDeg);
+            const triangleRotation = (90 - ballAngleDeg);
             
             // Add an arrow at the visible point
             worldFrameChart.data.datasets.push({
