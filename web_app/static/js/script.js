@@ -792,14 +792,29 @@ function updatePaddleFrameChart(data) {
         const ballPath = 0.35; // Length of ball path
         const paddleWidth = 0.15; // Width of paddle
         
-        // Ball path - incoming (vertical line with arrow)
+        // Ball position (extracted to a variable for reuse)
+        const ballPosition = { x: 0, y: paddleY - 0.2 };
+        
+        // Ball path - past trajectory (solid line below the ball)
         paddleFrameChart.data.datasets.push({
-            label: 'Ball Path',
-            data: [{ x: 0, y: paddleY - ballPath }, { x: 0, y: paddleY }],
+            label: 'Ball Path (Past)',
+            data: [{ x: 0, y: paddleY - ballPath }, ballPosition],
             showLine: true,
             borderColor: '#4bc0c0',
             backgroundColor: 'transparent',
             borderWidth: 1.5,
+            pointRadius: 0
+        });
+        
+        // Ball path - future trajectory (dashed line above the ball)
+        paddleFrameChart.data.datasets.push({
+            label: 'Ball Path (Future)',
+            data: [ballPosition, { x: 0, y: paddleY }],
+            showLine: true,
+            borderColor: '#4bc0c0',
+            backgroundColor: 'transparent',
+            borderWidth: 1.5,
+            borderDash: [3, 3], // Adding dashed style for future trajectory
             pointRadius: 0
         });
         
@@ -820,7 +835,7 @@ function updatePaddleFrameChart(data) {
         // Ball
         paddleFrameChart.data.datasets.push({
             label: 'Ball',
-            data: [{ x: 0, y: paddleY - 0.2 }],
+            data: [ballPosition],
             showLine: false,
             borderColor: '#4bc0c0',
             backgroundColor: '#4bc0c0',
