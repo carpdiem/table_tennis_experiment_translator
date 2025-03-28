@@ -982,8 +982,10 @@ function updateResultChart(angle_ball_after) {
         const midpointX = -outgoingLength * Math.sin(degToRad(angle_ball_after)) / 2;
         const midpointY = paddleY - outgoingLength * Math.cos(degToRad(angle_ball_after)) / 2;
         
-        // Calculate rotation: 180 - angle_ball_after to point along the trajectory
-        const triangleRotation = 180 - angle_ball_after;
+        // Calculate rotation for the triangle
+        // Need to adjust for the negative sign in the trajectory x-coordinate calculation
+        // Since we use -sin() in the trajectory, we need to use 180 + angle instead of 180 - angle
+        const triangleRotation = 180 + angle_ball_after;
         
         // Add the direction triangle
         resultChart.data.datasets.push({
