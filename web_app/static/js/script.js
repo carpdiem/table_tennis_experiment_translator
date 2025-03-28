@@ -690,7 +690,7 @@ function updateWorldFrameChart(data) {
             label: 'Vertical Paddle Reference',
             data: verticalPaddleLine,
             showLine: true,
-            borderColor: '#8a2be2',
+            borderColor: '#a64dff',
             backgroundColor: 'transparent',
             borderWidth: 1,
             borderDash: [2, 2],
@@ -708,7 +708,7 @@ function updateWorldFrameChart(data) {
             label: 'Paddle Face',
             data: paddleFaceLine,
             showLine: true,
-            borderColor: '#8a2be2',
+            borderColor: '#a64dff',
             backgroundColor: 'transparent',
             borderWidth: 1,
             borderDash: [2, 2],
@@ -737,7 +737,7 @@ function updateWorldFrameChart(data) {
             label: 'Closure Angle',
             data: closureArcPoints,
             showLine: true,
-            borderColor: '#8a2be2', // Match closure angle color
+            borderColor: '#a64dff', // Match closure angle color
             backgroundColor: 'transparent',
             borderWidth: 1, 
             borderDash: [3, 3], // Adding dashed line style for cleaner look
