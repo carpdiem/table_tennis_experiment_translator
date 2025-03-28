@@ -792,8 +792,8 @@ function updatePaddleFrameChart(data) {
         const ballPath = 0.35; // Length of ball path
         const paddleWidth = 0.15; // Width of paddle
         
-        // Ball position (extracted to a variable for reuse)
-        const ballPosition = { x: 0, y: paddleY - 0.2 };
+        // Ball position - now 2/3 of the way from bottom to paddle
+        const ballPosition = { x: 0, y: paddleY - (ballPath * 1/3) };
         
         // Ball path - past trajectory (solid line below the ball)
         paddleFrameChart.data.datasets.push({
