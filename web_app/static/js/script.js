@@ -330,7 +330,7 @@ function calculateWorldFrame() {
                 
                 // Update the visualization charts
                 updateResultChart(angle_ball_after);
-                updateFinalResultChart(result.visualization.world_frame);
+                updateFinalResultChart(result.visualization.world_frame, result.angle_ball_after_in_w);
                 
                 // No need to show panels as they're already visible in the 2x2 grid layout
                 // The following lines were causing the error:
@@ -1030,7 +1030,7 @@ function updateResultChart(angle_ball_after) {
 }
 
 // Update the final result chart
-function updateFinalResultChart(data) {
+function updateFinalResultChart(data, reboundAngle) {
     try {
         // Clear previous data
         finalResultChart.data.datasets = [];
@@ -1095,6 +1095,30 @@ function updateFinalResultChart(data) {
             borderWidth: 1.5,
             pointRadius: 0
         });
+        
+        // Add direction triangle to the after-impact trajectory
+        if (afterTrajectory.length > 0) {
+            // Find midpoint of the after-impact trajectory
+            const midIndex = Math.floor(afterTrajectory.length / 2);
+            const midPoint = afterTrajectory[midIndex];
+            
+            // Get the angle for the triangle rotation
+            // We need to calculate (180 - ball_rebound_angle) for the correct rotation
+            const ballReboundAngle = reboundAngle || 0; // Fallback to 0 if missing
+            const triangleRotation = 180 - ballReboundAngle;
+            
+            // Add the direction triangle
+            finalResultChart.data.datasets.push({
+                label: 'After-Impact Direction',
+                data: [midPoint],
+                showLine: false,
+                borderColor: '#4bc0c0', // Match the exact teal color of the trajectory
+                backgroundColor: '#4bc0c0', // Match the exact teal color of the trajectory
+                pointStyle: 'triangle',
+                rotation: triangleRotation,
+                pointRadius: 5
+            });
+        }
         
         // Ball at collision
         finalResultChart.data.datasets.push({
