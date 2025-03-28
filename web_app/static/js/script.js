@@ -1134,8 +1134,8 @@ function updateFinalResultChart(data, reboundAngle) {
                 label: 'After-Impact Direction',
                 data: [midPoint],
                 showLine: false,
-                borderColor: '#000000', // Changed from teal to black
-                backgroundColor: '#000000', // Changed from teal to black
+                borderColor: '#ffffff', // Changed from black to white
+                backgroundColor: '#ffffff', // Changed from black to white
                 pointStyle: 'triangle',
                 rotation: triangleRotation,
                 pointRadius: 5
