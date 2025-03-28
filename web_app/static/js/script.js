@@ -476,6 +476,12 @@ function updateWorldFrameChart(data) {
             x_p - paddleMidPoint.x
         );
         
+        // In Chart.js, the triangle default orientation has a flat side at the top and a point at the bottom
+        // When rotation is 0, the bottom vertex is at 180 degrees in standard coordinates
+        // To make a vertex point toward the origin, we need to rotate so the bottom vertex aligns with our angle
+        // Converting to degrees and adding offset to align bottom vertex with the origin
+        const triangleRotation = (rad2deg(arrowToOriginAngle) + 180) % 360;
+        
         worldFrameChart.data.datasets.push({
             label: 'Paddle Direction',
             data: [paddleMidPoint],
@@ -483,8 +489,8 @@ function updateWorldFrameChart(data) {
             borderColor: '#ff6384',
             backgroundColor: '#ff6384',
             pointStyle: 'triangle',
-            rotation: rad2deg(arrowToOriginAngle) - 90, // Rotate to point toward the origin
-            pointRadius: 4
+            rotation: triangleRotation,
+            pointRadius: 5
         });
         
         // Paddle surface
