@@ -446,9 +446,14 @@ function updateWorldFrameChart(data) {
         // Paddle path - shortened to just show what's relevant
         const paddleStart = { x: x_p, y: y_p };
         
-        // Instead of calculating with atan2, use the direct angle value from user input
+        // Get the paddle angle value directly from user input
+        // (This will be used for multiple calculations below)
         const paddleAngleDeg = parseFloat(document.getElementById('angle_paddle').value);
-        const paddleDirection = degToRad(paddleAngleDeg);
+        
+        // For paddle trajectory, we need to apply the correct sign convention
+        // Positive paddle angles should rotate the paddle CW from the x-axis
+        // So we need to use negative angle in the calculation
+        const paddleDirection = degToRad(-paddleAngleDeg);
         
         const paddleEnd = { 
             x: x_p + paddleLength * Math.cos(paddleDirection),
