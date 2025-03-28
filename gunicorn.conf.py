@@ -1,11 +1,12 @@
 # Gunicorn configuration file
 import multiprocessing
+import os
 
 # Binding
-bind = "0.0.0.0:8080"  # DigitalOcean App Platform expects port 8080
+bind = "0.0.0.0:" + os.environ.get("PORT", "8080")  # Use environment PORT or default to 8080
 
 # Worker Processes
-workers = multiprocessing.cpu_count() * 2 + 1
+workers = 2  # Simplified for Digital Ocean App Platform
 worker_class = 'sync'
 threads = 2
 

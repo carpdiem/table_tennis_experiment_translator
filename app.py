@@ -5,6 +5,11 @@ import os
 
 app = Flask(__name__)
 
+# Add a health check endpoint for DigitalOcean
+@app.route('/health')
+def health():
+    return jsonify(status="healthy"), 200
+
 def deg2rad(deg):
     """Convert degrees to radians."""
     return np.pi / 180.0 * deg
