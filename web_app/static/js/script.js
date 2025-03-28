@@ -445,10 +445,11 @@ function updateWorldFrameChart(data) {
         
         // Paddle path - shortened to just show what's relevant
         const paddleStart = { x: x_p, y: y_p };
-        const paddleDirection = Math.atan2(
-            (data.y_paddle[1] - data.y_paddle[0]), 
-            (data.x_paddle[1] - data.x_paddle[0])
-        );
+        
+        // Instead of calculating with atan2, use the direct angle value from user input
+        const paddleAngleDeg = parseFloat(document.getElementById('angle_paddle').value);
+        const paddleDirection = degToRad(paddleAngleDeg);
+        
         const paddleEnd = { 
             x: x_p + paddleLength * Math.cos(paddleDirection),
             y: y_p + paddleLength * Math.sin(paddleDirection)
@@ -474,8 +475,7 @@ function updateWorldFrameChart(data) {
         // rotate counterclockwise by (90° - paddle_trajectory_angle)
         // Note: In Chart.js, positive rotation values mean clockwise rotation,
         // so we'll use negative value for counterclockwise
-        const paddleDirectionDeg = rad2deg(paddleDirection);
-        const triangleRotation = -(90 - paddleDirectionDeg);
+        const triangleRotation = -(90 - paddleAngleDeg);
         
         worldFrameChart.data.datasets.push({
             label: 'Paddle Direction',
@@ -580,7 +580,6 @@ function updateWorldFrameChart(data) {
         });
         
         // Add paddle angle arc
-        const paddleAngleDeg = parseFloat(document.getElementById('angle_paddle').value);
         const paddleAngleRad = degToRad(paddleAngleDeg);
         
         // Reference line for horizontal (paddle side)
