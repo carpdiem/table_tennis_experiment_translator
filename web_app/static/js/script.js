@@ -1080,15 +1080,49 @@ function updateFinalResultChart(data, reboundAngle) {
         });
         
         // Paddle surface
-        finalResultChart.data.datasets.push({
-            label: 'Paddle Surface',
-            data: data.x_bat.map((x, i) => ({ x: x, y: data.y_bat[i] })),
-            showLine: true,
-            borderColor: '#ff6384',
-            backgroundColor: 'transparent',
-            borderWidth: 2,
-            pointRadius: 0
-        });
+        // Make the paddle surface (pink line) twice as long by extending the endpoints
+        // First, we need to extract the endpoint coordinates
+        const paddlePoints = data.x_bat.map((x, i) => ({ x: x, y: data.y_bat[i] }));
+        
+        if (paddlePoints.length >= 2) {
+            // Calculate midpoint of the paddle
+            const midX = (paddlePoints[0].x + paddlePoints[1].x) / 2;
+            const midY = (paddlePoints[0].y + paddlePoints[1].y) / 2;
+            
+            // Calculate direction vector from midpoint to each endpoint
+            const dirX1 = paddlePoints[0].x - midX;
+            const dirY1 = paddlePoints[0].y - midY;
+            const dirX2 = paddlePoints[1].x - midX;
+            const dirY2 = paddlePoints[1].y - midY;
+            
+            // Create new endpoints by extending twice as far from midpoint
+            const extendedPaddlePoints = [
+                { x: midX + dirX1 * 2, y: midY + dirY1 * 2 },
+                { x: midX + dirX2 * 2, y: midY + dirY2 * 2 }
+            ];
+            
+            // Use extended paddle points instead of original ones
+            finalResultChart.data.datasets.push({
+                label: 'Paddle Surface',
+                data: extendedPaddlePoints,
+                showLine: true,
+                borderColor: '#ff6384',
+                backgroundColor: 'transparent',
+                borderWidth: 2,
+                pointRadius: 0
+            });
+        } else {
+            // Fallback to original paddle points if there's an issue
+            finalResultChart.data.datasets.push({
+                label: 'Paddle Surface',
+                data: paddlePoints,
+                showLine: true,
+                borderColor: '#ff6384',
+                backgroundColor: 'transparent',
+                borderWidth: 2,
+                pointRadius: 0
+            });
+        }
         
         // Ensure x_f and y_f arrays exist
         if (!Array.isArray(data.x_f) || !Array.isArray(data.y_f)) {
