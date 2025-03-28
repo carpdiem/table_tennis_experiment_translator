@@ -470,6 +470,12 @@ function updateWorldFrameChart(data) {
             y: (paddleStart.y + paddleEnd.y) / 2
         };
         
+        // Calculate angle from midpoint toward origin (ball/paddle contact point)
+        const arrowToOriginAngle = Math.atan2(
+            y_p - paddleMidPoint.y,
+            x_p - paddleMidPoint.x
+        );
+        
         worldFrameChart.data.datasets.push({
             label: 'Paddle Direction',
             data: [paddleMidPoint],
@@ -477,7 +483,7 @@ function updateWorldFrameChart(data) {
             borderColor: '#ff6384',
             backgroundColor: '#ff6384',
             pointStyle: 'triangle',
-            rotation: rad2deg(paddleDirection) - 90, // Rotate to point in paddle direction
+            rotation: rad2deg(arrowToOriginAngle) - 90, // Rotate to point toward the origin
             pointRadius: 4
         });
         
