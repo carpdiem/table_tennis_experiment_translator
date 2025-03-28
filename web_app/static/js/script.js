@@ -807,9 +807,12 @@ function updatePaddleFrameChart(data) {
         });
         
         // Add direction triangle in the middle of the past trajectory
+        // Position it higher to be at the midpoint of the visible solid line
         const pastTrajectoryMidpoint = {
             x: 0, // Always at x=0 since trajectory is vertical
-            y: (paddleY - ballPath + ballPosition.y) / 2 // Midpoint of the solid line segment
+            // Adjust the y-coordinate to be higher up on the visible part of the line
+            // Biasing more toward the ball position and less toward the bottom endpoint
+            y: paddleY - ballPath/2 // Higher position, halfway up the visible path area
         };
         
         paddleFrameChart.data.datasets.push({
