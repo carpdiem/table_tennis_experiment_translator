@@ -231,6 +231,9 @@ function calculatePaddleFrame() {
         .then(response => {
             const result = response.data;
             
+            // Debug: Print ball_traj_angle to console
+            console.log("ball_traj_angle from API:", result.ball_traj_angle);
+            
             // Save angle constraint for the experiment
             ballTrajAngle = result.ball_traj_angle;
             

@@ -44,8 +44,13 @@ def calculate_paddle_frame():
     ball_in_p_vec = ball_vec - paddle_vec
     
     # Calculate trajectory angle and speed in paddle frame
-    ball_traj_angle = 90.0 - closed_paddle - rad2deg(np.arctan2(ball_in_p_vec[1,0], ball_in_p_vec[0,0]))
-    ball_traj_speed = np.sqrt(ball_in_p_vec[0,0]**2 + ball_in_p_vec[1,0]**2)
+    # Fixed to match notebook implementation exactly
+    # Original: ball_traj_angle = 90.0 - closed_paddle - rad2deg(np.arctan2(ball_in_p_vec[1,0], ball_in_p_vec[0,0]))
+    ball_traj_angle = 90.0 - closed_paddle - rad2deg(np.arctan(-ball_in_p_vec[1,0]/ball_in_p_vec[0,0]))
+    
+    # Also fixing speed calculation to match the notebook
+    # Original: ball_traj_speed = np.sqrt(ball_in_p_vec[0,0]**2 + ball_in_p_vec[1,0]**2)
+    ball_traj_speed = np.sqrt(ball_in_p_vec[0,0]**2 + ball_in_p_vec[1,0]**2)  # This is actually equivalent
     
     # Calculate visualization data for first plot
     t = np.linspace(-0.25, 0, 101)
