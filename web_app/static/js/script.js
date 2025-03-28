@@ -1134,8 +1134,8 @@ function updateFinalResultChart(data, reboundAngle) {
                 label: 'After-Impact Direction',
                 data: [midPoint],
                 showLine: false,
-                borderColor: '#4bc0c0', // Match the exact teal color of the trajectory
-                backgroundColor: '#4bc0c0', // Match the exact teal color of the trajectory
+                borderColor: '#000000', // Changed from teal to black
+                backgroundColor: '#000000', // Changed from teal to black
                 pointStyle: 'triangle',
                 rotation: triangleRotation,
                 pointRadius: 5
