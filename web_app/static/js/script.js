@@ -1181,8 +1181,8 @@ function updateFinalResultChart(data, reboundAngle) {
             label: 'Ball (At Collision)',
             data: [{ x: x_p, y: y_p }],
             showLine: false,
-            borderColor: '#000000', // Changed from teal (#4bc0c0) to black
-            backgroundColor: '#000000', // Changed from teal (#4bc0c0) to black
+            borderColor: '#ffffff', 
+            backgroundColor: '#ffffff', 
             borderWidth: 0,
             pointRadius: 4
         });
