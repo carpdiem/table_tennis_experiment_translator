@@ -421,14 +421,14 @@ function updateWorldFrameChart(data) {
             const midIndex = Math.floor(trajectory.length / 2);
             const midPoint = trajectory[midIndex];
             
-            // Calculate direction based on surrounding points
-            let directionAngle = 0;
-            if (midIndex > 0 && midIndex < trajectory.length - 1) {
-                directionAngle = Math.atan2(
-                    trajectory[midIndex+1].y - trajectory[midIndex-1].y, 
-                    trajectory[midIndex+1].x - trajectory[midIndex-1].x
-                );
-            }
+            // Get the ball angle directly from user input
+            const ballAngleDeg = parseFloat(document.getElementById('angle_ball').value);
+            
+            // For ball trajectory, similar to paddle trajectory, 
+            // we need to ensure correct direction
+            // Since positive ball angle should point downward and to the right,
+            // we use the same sign convention as the paddle
+            const triangleRotation = -(90 - ballAngleDeg);
             
             // Add an arrow at the midpoint
             worldFrameChart.data.datasets.push({
@@ -438,8 +438,8 @@ function updateWorldFrameChart(data) {
                 borderColor: '#4bc0c0',
                 backgroundColor: '#4bc0c0',
                 pointStyle: 'triangle',
-                rotation: rad2deg(directionAngle) - 90, // Rotate to point in trajectory direction
-                pointRadius: 4
+                rotation: triangleRotation,
+                pointRadius: 5
             });
         }
         
