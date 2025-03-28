@@ -405,6 +405,19 @@ function updateWorldFrameChart(data) {
         
         // Ball trajectory - trimmed to just the relevant portion
         const trajectory = trimTrajectory(data.x_ball_after, data.y_ball_after, 40);
+        
+        // Only keep points within our viewing window plus a small buffer
+        const bufferFactor = 0.1; // Buffer beyond view bounds
+        const xBuffer = (xMax - xMin) * bufferFactor;
+        const yBuffer = (yMax - yMin) * bufferFactor;
+        
+        const visibleTrajectory = trajectory.filter(point => 
+            point.x >= xMin - xBuffer && 
+            point.x <= xMax + xBuffer && 
+            point.y >= yMin - yBuffer && 
+            point.y <= yMax + yBuffer
+        );
+        
         worldFrameChart.data.datasets.push({
             label: 'Ball Trajectory',
             data: trajectory.map((point) => ({ x: point.x, y: point.y })),
@@ -415,32 +428,38 @@ function updateWorldFrameChart(data) {
             pointRadius: 0
         });
         
-        // Add direction arrow in the middle of the ball trajectory
-        if (trajectory.length > 0) {
-            // Find middle point in the trajectory
-            const midIndex = Math.floor(trajectory.length / 2);
-            const midPoint = trajectory[midIndex];
+        // Add direction arrow at a visible point in the trajectory
+        if (visibleTrajectory.length > 0) {
+            // Pick a point near the first third of the visible trajectory
+            // This ensures the arrow is visible early in the path
+            const arrowIndex = Math.min(Math.floor(visibleTrajectory.length / 3), visibleTrajectory.length - 1);
+            const arrowPoint = visibleTrajectory[arrowIndex];
+            
+            // Make the triangle larger and more visible
+            const ballPointRadius = 7;
             
             // Get the ball angle directly from user input
             const ballAngleDeg = parseFloat(document.getElementById('angle_ball').value);
             
-            // For ball trajectory, similar to paddle trajectory, 
-            // we need to ensure correct direction
-            // Since positive ball angle should point downward and to the right,
-            // we use the same sign convention as the paddle
+            // For ball trajectory, we need to ensure correct direction
+            // Using the same rotation calculation as for the paddle triangle
             const triangleRotation = -(90 - ballAngleDeg);
             
-            // Add an arrow at the midpoint
+            // Add an arrow at the visible point
             worldFrameChart.data.datasets.push({
                 label: 'Ball Direction',
-                data: [{ x: midPoint.x, y: midPoint.y }],
+                data: [{ x: arrowPoint.x, y: arrowPoint.y }],
                 showLine: false,
                 borderColor: '#4bc0c0',
                 backgroundColor: '#4bc0c0',
                 pointStyle: 'triangle',
                 rotation: triangleRotation,
-                pointRadius: 5
+                pointRadius: ballPointRadius
             });
+            
+            console.log('Ball triangle position:', arrowPoint, 'Visible trajectory points:', visibleTrajectory.length);
+        } else {
+            console.log('No visible trajectory points for ball direction arrow');
         }
         
         // Paddle path - shortened to just show what's relevant
@@ -738,20 +757,28 @@ function updateWorldFrameChart(data) {
     }
 }
 
-// Helper function to trim trajectory to show only the relevant part
-function trimTrajectory(xValues, yValues, points) {
-    if (!Array.isArray(xValues) || !Array.isArray(yValues)) {
-        console.error('Invalid trajectory data:', { xValues, yValues });
-        return [];
+// Helper function to trim a trajectory to points within the visible window
+function trimTrajectory(x, y, maxPoints) {
+    const points = [];
+    for (let i = 0; i < x.length && i < y.length; i++) {
+        points.push({ x: x[i], y: y[i] });
     }
     
-    const result = [];
-    // Take the last 'points' points from the trajectory
-    const startIndex = Math.max(0, xValues.length - points);
-    for (let i = startIndex; i < xValues.length; i++) {
-        result.push({ x: xValues[i], y: yValues[i] });
+    // If we have too many points, select a subset to maintain the shape while reducing density
+    if (points.length > maxPoints) {
+        const step = Math.ceil(points.length / maxPoints);
+        const trimmedPoints = [];
+        for (let i = 0; i < points.length; i += step) {
+            trimmedPoints.push(points[i]);
+        }
+        // Ensure we always include the last point
+        if (trimmedPoints[trimmedPoints.length - 1] !== points[points.length - 1]) {
+            trimmedPoints.push(points[points.length - 1]);
+        }
+        return trimmedPoints;
     }
-    return result;
+    
+    return points;
 }
 
 // Update the paddle frame chart
