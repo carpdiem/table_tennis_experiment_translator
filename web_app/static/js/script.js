@@ -806,6 +806,23 @@ function updatePaddleFrameChart(data) {
             pointRadius: 0
         });
         
+        // Add direction triangle in the middle of the past trajectory
+        const pastTrajectoryMidpoint = {
+            x: 0, // Always at x=0 since trajectory is vertical
+            y: (paddleY - ballPath + ballPosition.y) / 2 // Midpoint of the solid line segment
+        };
+        
+        paddleFrameChart.data.datasets.push({
+            label: 'Ball Direction',
+            data: [pastTrajectoryMidpoint],
+            showLine: false,
+            borderColor: '#4bc0c0',
+            backgroundColor: '#4bc0c0',
+            pointStyle: 'triangle',
+            rotation: 0, // 0 degrees points upward
+            pointRadius: 5
+        });
+        
         // Ball path - future trajectory (dashed line above the ball)
         paddleFrameChart.data.datasets.push({
             label: 'Ball Path (Future)',
