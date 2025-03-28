@@ -1168,8 +1168,8 @@ function updateFinalResultChart(data, reboundAngle) {
                 label: 'After-Impact Direction',
                 data: [midPoint],
                 showLine: false,
-                borderColor: '#ffffff', // Changed from black to white
-                backgroundColor: '#ffffff', // Changed from black to white
+                borderColor: '#ffffff', // Changed back to white
+                backgroundColor: '#ffffff', // Changed back to white
                 pointStyle: 'triangle',
                 rotation: triangleRotation,
                 pointRadius: 5
@@ -1181,8 +1181,8 @@ function updateFinalResultChart(data, reboundAngle) {
             label: 'Ball (At Collision)',
             data: [{ x: x_p, y: y_p }],
             showLine: false,
-            borderColor: '#4bc0c0',
-            backgroundColor: '#4bc0c0',
+            borderColor: '#000000', // Changed from teal (#4bc0c0) to black
+            backgroundColor: '#000000', // Changed from teal (#4bc0c0) to black
             borderWidth: 0,
             pointRadius: 4
         });
